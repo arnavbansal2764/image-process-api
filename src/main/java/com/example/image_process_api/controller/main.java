@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.image_process_api.dto.RegisterRequest;
+import com.example.image_process_api.dto.LoginRequest;
 import com.example.image_process_api.dto.AuthResponse;
 import com.example.image_process_api.service.AuthService;
 
@@ -25,9 +26,14 @@ public class main {
         return new String("Welcome to Image Processing API");
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public AuthResponse register(@RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
+    }
+    
+    @PostMapping("login")
+    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
     
 }
