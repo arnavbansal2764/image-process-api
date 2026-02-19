@@ -1,0 +1,15 @@
+spring:
+    application:
+        name: image-process-api
+    mongodb:
+        uri: ${MONGODB_URI}
+        database: image-process-api
+jwt:
+    secret: mySecretKeyForJWTTokenGenerationPleaseChangeInProduction123456789
+    expiration: 86400000
+aws:
+    s3:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+        region: ${AWS_REGION:ap-south-1}
+        bucket-name: ${AWS_S3_BUCKET_NAME}
