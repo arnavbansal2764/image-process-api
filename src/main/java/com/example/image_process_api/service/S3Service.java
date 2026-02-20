@@ -139,6 +139,16 @@ public class S3Service {
     }
     
     /**
+     * Get image by ID from MongoDB
+     * @param imageId - Image document ID
+     * @return Image details
+     */
+    public Image getImageById(String imageId) {
+        return imageRepository.findById(imageId)
+                .orElseThrow(() -> new AuthException("Image not found"));
+    }
+    
+    /**
      * Generate S3 object URL
      * @param fileKey - S3 object key
      * @return S3 object URL

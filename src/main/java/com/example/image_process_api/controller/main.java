@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import com.example.image_process_api.dto.FileUploadResponse;
 import com.example.image_process_api.service.AuthService;
 import com.example.image_process_api.service.S3Service;
 import com.example.image_process_api.exception.AuthException;
+import com.example.image_process_api.entity.Image;
 
 import java.io.IOException;
 
@@ -64,6 +66,11 @@ public class main {
                 file.getOriginalFilename(),
                 "File uploaded successfully"
         );
+    }
+    
+    @GetMapping("images/{id}")
+    public Image getImage(@PathVariable String id) {
+        return s3Service.getImageById(id);
     }
     
 }
