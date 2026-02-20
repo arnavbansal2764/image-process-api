@@ -14,8 +14,9 @@ import com.example.image_process_api.dto.RegisterRequest;
 import com.example.image_process_api.dto.LoginRequest;
 import com.example.image_process_api.dto.AuthResponse;
 import com.example.image_process_api.dto.FileUploadResponse;
+import com.example.image_process_api.dto.PaginatedResponse;
 import com.example.image_process_api.service.AuthService;
-import com.example.image_process_api.service.S3Service;
+import com.example.image_process_api.service.ImageService;
 import com.example.image_process_api.exception.AuthException;
 import com.example.image_process_api.entity.Image;
 
@@ -31,7 +32,7 @@ public class main {
     private AuthService authService;
     
     @Autowired
-    private S3Service s3Service;
+    private ImageService imageService;
     
     @GetMapping()
     public String getHomeString() {
@@ -55,10 +56,11 @@ public class main {
             throw new AuthException("File cannot be empty");
         }
         
-        String fileUrl = s3Service.uploadFile(
+        String fileUrl = imageService.uploadImage(
                 file.getBytes(),
                 file.getOriginalFilename(),
-                file.getContentType()
+                file.getContentType(),
+                null
         );
         
         return new FileUploadResponse(
@@ -70,7 +72,15 @@ public class main {
     
     @GetMapping("images/{id}")
     public Image getImage(@PathVariable String id) {
-        return s3Service.getImageById(id);
+        return imageService.getImageById(id);
+    }
+    
+    @GetMapping("images")
+    public PaginatedResponse<Image> getImages(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        return imageService.getImages(page, limit);
     }
     
 }
+
