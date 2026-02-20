@@ -8,15 +8,21 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.core.sync.RequestBody;
 import com.example.image_process_api.exception.AuthException;
+import com.example.image_process_api.entity.Image;
+import com.example.image_process_api.repository.ImageRepository;
 import java.util.UUID;
 import java.util.Arrays;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 public class S3Service {
     
     @Autowired
     private S3Client s3Client;
+    
+    @Autowired
+    private ImageRepository imageRepository;
     
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
@@ -42,6 +48,18 @@ public class S3Service {
      * @return S3 file URL
      */
     public String uploadFile(byte[] fileData, String fileName, String contentType) {
+        return uploadFile(fileData, fileName, contentType, null);
+    }
+    
+    /**
+     * Upload a file to S3 and store metadata in MongoDB
+     * @param fileData - byte array of the file
+     * @param fileName - original filename
+     * @param contentType - MIME type of the file
+     * @param uploadedBy - user ID who uploaded the file (optional)
+     * @return S3 file URL
+     */
+    public String uploadFile(byte[] fileData, String fileName, String contentType, String uploadedBy) {
         // Validate file format
         validateFileFormat(fileName, contentType);
         
@@ -60,8 +78,22 @@ public class S3Service {
                     RequestBody.fromBytes(fileData)
             );
             
+            // Generate S3 URL
+            String fileUrl = generateS3Url(fileKey);
+            
+            // Save image metadata to MongoDB
+            Image image = new Image(
+                    null,
+                    fileUrl,
+                    fileName,
+                    contentType,
+                    LocalDateTime.now(),
+                    uploadedBy
+            );
+            imageRepository.save(image);
+            
             // Return the S3 object URL
-            return generateS3Url(fileKey);
+            return fileUrl;
             
         } catch (AuthException e) {
             // Re-throw validation exceptions
