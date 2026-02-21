@@ -4,6 +4,10 @@ spring:
     mongodb:
         uri: ${MONGODB_URI}
         database: image-process-api
+    servlet:
+        multipart:
+            max-file-size: 50MB
+            max-request-size: 50MB
 jwt:
     secret: mySecretKeyForJWTTokenGenerationPleaseChangeInProduction123456789
     expiration: 86400000

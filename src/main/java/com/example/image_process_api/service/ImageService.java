@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.image_process_api.entity.Image;
 import com.example.image_process_api.repository.ImageRepository;
@@ -44,6 +45,20 @@ public class ImageService {
         imageRepository.save(image);
         
         return fileUrl;
+    }
+    
+    /**
+     * Get the last uploaded image ID for tracking purposes
+     * @return Last uploaded image ID
+     */
+    public String getLastUploadedImageId() {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "uploadedAt"));
+        Image lastImage = imageRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AuthException("No images found"));
+        return lastImage.getId();
     }
     
     /**

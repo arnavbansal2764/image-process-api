@@ -15,8 +15,10 @@ import com.example.image_process_api.dto.LoginRequest;
 import com.example.image_process_api.dto.AuthResponse;
 import com.example.image_process_api.dto.FileUploadResponse;
 import com.example.image_process_api.dto.PaginatedResponse;
+import com.example.image_process_api.dto.TransformationRequest;
 import com.example.image_process_api.service.AuthService;
 import com.example.image_process_api.service.ImageService;
+import com.example.image_process_api.service.ImageTransformationService;
 import com.example.image_process_api.exception.AuthException;
 import com.example.image_process_api.entity.Image;
 
@@ -33,6 +35,9 @@ public class main {
     
     @Autowired
     private ImageService imageService;
+    
+    @Autowired
+    private ImageTransformationService imageTransformationService;
     
     @GetMapping()
     public String getHomeString() {
@@ -80,6 +85,11 @@ public class main {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return imageService.getImages(page, limit);
+    }
+    
+    @PostMapping("images/{id}/transform")
+    public Image transformImage(@PathVariable String id, @RequestBody TransformationRequest transformationRequest) {
+        return imageTransformationService.applyTransformations(id, transformationRequest);
     }
     
 }
