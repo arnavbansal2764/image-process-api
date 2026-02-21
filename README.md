@@ -62,7 +62,7 @@ Create a `.env` file or export these variables before running the application:
 
 ```bash
 # MongoDB
-export MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/image-process-api?retryWrites=true&w=majority"
+export MONGODB_URI="  ?retryWrites=true&w=majority"
 
 # AWS S3
 export AWS_ACCESS_KEY="your-aws-access-key"
@@ -113,8 +113,8 @@ mvn clean package
 
 **With Environment Variables:**
 ```bash
-export MONGODB_URI="mongodb+srv://admin:password@cluster0.mongodb.net/image-process-api"
-export AWS_ACCESS_KEY="AKIAW3MEECLSS2P2XI3M"
+export MONGODB_URI=""
+export AWS_ACCESS_KEY=" "
 export AWS_SECRET_KEY="secret-key"
 export AWS_REGION="ap-south-1"
 export AWS_S3_BUCKET_NAME="image-process-api"
@@ -125,8 +125,8 @@ java -jar target/image-process-api-0.0.1-SNAPSHOT.jar
 **Or inline:**
 ```bash
 java -jar target/image-process-api-0.0.1-SNAPSHOT.jar \
-  --mongodb.uri="mongodb+srv://admin:password@cluster0.mongodb.net/image-process-api" \
-  --aws.s3.access-key="AKIAW3MEECLSS2P2XI3M" \
+  --mongodb.uri="" \
+  --aws.s3.access-key=" " \
   --aws.s3.secret-key="secret-key" \
   --aws.s3.region="ap-south-1" \
   --aws.s3.bucket-name="image-process-api"
@@ -500,7 +500,7 @@ Error: MongoSocketOpenException: Exception opening socket
 **Ensure MongoDB URI is correct:**
 ```bash
 # Test connection
-mongosh "mongodb+srv://username:password@cluster.mongodb.net/image-process-api"
+mongosh "  "
 ```
 
 ### AWS S3 Access Denied
